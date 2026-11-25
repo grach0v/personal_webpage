@@ -1,0 +1,40 @@
+<mujoco model="playground">
+  <include file="panda.xml"/>
+
+  <option timestep="0.002" cone="elliptic" impratio="10"/>
+
+  <default>
+    <default class="toy">
+      <geom condim="4" friction="1.4 0.02 0.002" solref="0.004 1" density="350"/>
+    </default>
+  </default>
+
+  <worldbody>
+    <geom name="table" type="plane" size="0 0 0.05" friction="1 0.02 0.002" rgba="0.9 0.9 0.9 1"/>
+
+    <body name="cube_a" pos="0.45 0.15 0.025">
+      <freejoint/>
+      <geom class="toy" type="box" size="0.025 0.025 0.025" rgba="0.89 0.24 0.36 1"/>
+    </body>
+    <body name="cube_b" pos="0.55 0.05 0.025">
+      <freejoint/>
+      <geom class="toy" type="box" size="0.025 0.025 0.025" rgba="0.16 0.50 0.33 1"/>
+    </body>
+    <body name="cube_c" pos="0.5 -0.12 0.025">
+      <freejoint/>
+      <geom class="toy" type="box" size="0.025 0.025 0.025" rgba="0.96 0.72 0.22 1"/>
+    </body>
+    <body name="cube_d" pos="0.62 -0.2 0.025">
+      <freejoint/>
+      <geom class="toy" type="box" size="0.025 0.025 0.025" rgba="0.17 0.38 0.75 1"/>
+    </body>
+    <body name="cube_e" pos="0.4 -0.05 0.02">
+      <freejoint/>
+      <geom class="toy" type="box" size="0.02 0.02 0.02" rgba="0.93 0.93 0.9 1"/>
+    </body>
+    <body name="melon" pos="0.6 0.22 0.034">
+      <freejoint/>
+      <geom class="toy" name="melon" type="sphere" size="0.034" condim="6" friction="1.4 0.03 0.004" rgba="0.2 0.5 0.25 1"/>
+    </body>
+  </worldbody>
+</mujoco>

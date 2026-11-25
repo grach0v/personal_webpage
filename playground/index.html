@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Playground — Denis Grachev</title>
+    <meta name="description" content="A Franka arm simulated with MuJoCo in your browser. Steer it with your mouse.">
+    <link rel="canonical" href="https://grachev.ai/playground/">
+    <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+    <link rel="stylesheet" href="../style.css">
+  </head>
+  <body>
+    <header class="wrap top">
+      <a class="mark" href="../">grachev.ai</a>
+      <nav aria-label="Sections">
+        <a href="../#research">Research</a>
+        <a href="../#projects">Projects</a>
+        <a href="../#about">About</a>
+        <a href="./" aria-current="page">Playground</a>
+        <a href="../cv.pdf">CV</a>
+      </nav>
+    </header>
+
+    <main class="wrap">
+      <div class="play-head">
+        <h1>A robot to play with</h1>
+        <p>A Franka arm with a Robotiq gripper and tactile fingertips, some cubes and a watermelon, simulated with MuJoCo in your browser. Leave it alone and it plays by itself.</p>
+      </div>
+
+      <div class="stage big" id="stage">
+        <button class="btn stage-wake" hidden>Wake the robot</button>
+        <div class="stage-hud">
+          <span class="status" data-state="loading"></span>
+          <button class="btn" data-act="auto" hidden>Let it play</button>
+          <button class="btn" data-act="mess" hidden>Make a mess</button>
+          <button class="btn" data-act="reset" hidden>Reset</button>
+        </div>
+      </div>
+      <ul class="keys">
+        <li class="mouse"><b>Move</b> the mouse to steer the hand</li>
+        <li class="mouse"><b>Click</b> to grab, click again to put down</li>
+        <li class="mouse"><b>Click while moving fast</b> to throw</li>
+        <li class="mouse"><b>Right-drag</b> to look around</li>
+        <li class="touch"><b>Tap</b> a toy to pick it up</li>
+        <li class="touch"><b>Tap</b> somewhere else to put it down</li>
+      </ul>
+
+      <section class="real" aria-labelledby="real">
+        <h2 id="real">And the real one</h2>
+        <p>The same kind of arm on a real table, stacking a green cube on a red one: three cameras, wrist depth, the fingertip touch sensors and the gripper, recorded with <a href="https://rerun.io/">Rerun</a>. Scrub the timeline, or drag the 3D view around.</p>
+        <!-- data-rrd: the recording (see tools/slim_rrd.py). data-version: the Rerun version that wrote it. -->
+        <div class="rerun" id="rerun" data-rrd="recordings/stack.rrd" data-version="0.43.2">
+          <img src="recordings/stack.jpg" alt="Rerun viewer showing the robot, its camera views, and touch sensor plots" width="1280" height="720" loading="lazy">
+          <button class="btn">Load the recording <span>6 MB, plus the viewer</span></button>
+        </div>
+        <p class="note"><a id="rerun-full" href="#" target="_blank" rel="noopener">Open it full screen</a>, which is the better way to see it on a phone.</p>
+      </section>
+    </main>
+
+    <footer class="wrap">
+      <span>© Denis Grachev</span>
+      <span>Physics: <a href="https://mujoco.org/">MuJoCo</a>. Robot model: <a href="https://github.com/google-deepmind/mujoco_menagerie">MuJoCo Menagerie</a>.</span>
+    </footer>
+
+    <script type="module">
+      import { initStage } from './stage.js?v=2';
+      initStage(document.getElementById('stage'));
+
+      // The Rerun viewer is tens of megabytes, so it only loads when asked for.
+      const rerun = document.getElementById('rerun');
+      const { rrd, version } = rerun.dataset;
+      // The hosted viewer cannot fetch from localhost, so a local preview uses a local one:
+      // `rerun --serve-web --web-viewer-port 9391`, with this page served with CORS headers.
+      const local = ['localhost', '127.0.0.1'].includes(location.hostname);
+      const base = local ? `http://${location.hostname}:9391/` : `https://app.rerun.io/version/${version}/index.html`;
+      const viewer = `${base}?url=${encodeURIComponent(new URL(rrd, location.href).href)}`;
+      document.getElementById('rerun-full').href = viewer;
+      rerun.querySelector('button').addEventListener('click', () => {
+        const frame = document.createElement('iframe');
+        frame.title = 'Rerun viewer';
+        frame.allow = 'fullscreen';
+        frame.src = viewer;
+        rerun.replaceChildren(frame);
+      });
+    </script>
+  </body>
+</html>

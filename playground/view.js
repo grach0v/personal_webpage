@@ -177,7 +177,7 @@ export async function mount(el, { onState = () => {} } = {}) {
   const pen = hud.getContext('2d');
   const drawTactile = () => {
     const css = getComputedStyle(el);
-    const idle = css.getPropertyValue('--line'), hot = css.getPropertyValue('--melon');
+    const idle = css.getPropertyValue('--line'), hot = css.getPropertyValue('--accent');
     const grids = sim.tactile();
     pen.setTransform(hudScale, 0, 0, hudScale, 0, 0);
     pen.clearRect(0, 0, hud.width, hud.height);

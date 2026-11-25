@@ -23,7 +23,7 @@ export function initStage(stage, { autostart = true } = {}) {
     wake?.remove();
     setState('loading');
     try {
-      const { mount } = await import('./view.js?v=2');
+      const { mount } = await import('./view.js?v=3');
       const view = await mount(stage, { onState: setState });
       stage.querySelectorAll('[data-act]').forEach((button) => {
         if (button !== letPlay) button.hidden = false;
